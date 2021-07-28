@@ -143,7 +143,6 @@ if ($action != 'delete') {
  */
 function adjust_indentation($modules, $amount, $context) {
     global $DB;
-
     require_capability('moodle/course:manageactivities', $context);
 
     foreach ($modules as $cm) {
@@ -154,6 +153,7 @@ function adjust_indentation($modules, $amount, $context) {
         }
 
         $DB->set_field('course_modules', 'indent', $cm->indent, array('id' => $cm->id));
+        rebuild_course_cache($cm->course);
     }
 }
 

@@ -10,10 +10,11 @@ php:
  - 7.0
  - 7.1
  - 7.2
+ - 7.4
 
 env:
   global:
-    - MOODLE_BRANCH=MOODLE_34_STABLE
+    - MOODLE_BRANCH=MOODLE_311_STABLE
   matrix:
     - DB=mysqli
 

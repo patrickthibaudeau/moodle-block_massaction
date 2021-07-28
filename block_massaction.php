@@ -91,7 +91,6 @@ class block_massaction extends block_base {
         if ($PAGE->user_is_editing()) {
             $jsdata = $this->get_section_data($COURSE);
             $jsdata['courseformat'] = $COURSE->format;
-
             /*
              * Have to cast $jsdata to an array, even though it's already an array, or the javascript
              * acts like we only sent an array consisting of the id of the first section that has
@@ -190,7 +189,7 @@ class block_massaction extends block_base {
 
         // Open "Select All" menu.
         $selecttext .= $this->get_item_content('select', 'allitems',
-            array('id' => 'block-massaction-selectsome'), array('value' => 'all'));
+            array('id' => 'block-massaction-selectsome', 'class' => 'form-control'), array('value' => 'all'));
 
         // Create "Deselect All" link.
         $selecttext .= $this->get_item_content('a', 'selectnone',
@@ -252,7 +251,7 @@ class block_massaction extends block_base {
 
         foreach ($actions as $action) {
             $opstext .= $this->get_item_content('select', 'action_' . $action,
-                array('id' => 'block-massaction-' . $action));
+                array('id' => 'block-massaction-' . $action, 'class' => 'form-control'));
         }
 
         $opstext .= html_writer::end_tag('ul');

@@ -1,8 +1,8 @@
 /* jshint ignore:start */
-define(['jquery', 'core/str'], function($, corestr) {
+define(['jquery', 'core/str'], function ($, corestr) {
 
     return {
-        init: function(data) {
+        init: function (data) {
             /*
              * We're importing a two-dimensional array of data, including section numbers and their
              * module/activity ids, section numbers and their human-readable labels, and the course
@@ -56,13 +56,12 @@ define(['jquery', 'core/str'], function($, corestr) {
 
             $('#block-massaction-clone').on('change', this.data, this.actionHandler);
         },
-        drawCheckboxes: function(data) {
-            var courseActivities = '';
-            var inputControl = '';
-            var jQueryIdentifier = '';
-            var moduleId = 0;
-            var moduleKey = 0;
-            var sectionId = 0;
+        drawCheckboxes: function (data) {
+            let courseActivities = '';
+            let inputControl = '';
+            let jQueryIdentifier = '';
+            let moduleId = 0;
+            let sectionId = 0;
 
             // Iterate through our sections and their activities, drawing checkboxes for each activity.
             for (sectionId in data.sectionmodules) {
@@ -70,33 +69,39 @@ define(['jquery', 'core/str'], function($, corestr) {
                  * Also check if the section exists in the DOM so we don't attempt to draw checkboxes
                  * for activities that do not exist in the DOM.
                  */
+                // console.log(sectionId);
+
                 if (sectionId !== null && $('#section-' + sectionId).length !== 0) {
                     /*
                      * We need the spans that house the edit controls in order to append our checkboxes
                      * to them later.
                      */
                     jQueryIdentifier = sectionId + ' ul.section li.activity ' + 'div.mod-indent-outer div';
-                    courseActivities = $('#section-' + jQueryIdentifier).children('span.actions');
+                    courseActivities = $('#section-' + jQueryIdentifier).children('.actions');
 
-                    for (moduleKey in data.sectionmodules[sectionId]) {
-                        moduleId = data.sectionmodules[sectionId][moduleKey];
+                    for (let i = 0; i < data.sectionmodules[sectionId].length; i++) {
+                        moduleId = data.sectionmodules[sectionId][i];
                         inputControl = document.createElement('input');
                         inputControl.type = 'checkbox';
                         inputControl.id = 'massaction-input-' + moduleId;
                         inputControl.className = 'massaction-checkbox';
+                        // Check to see if element actually exists. Due to recycle bin
+                        // it may still be in the module list, but not on the page.
+                        if (document.body.contains(courseActivities[i])) {
+                            courseActivities[i].appendChild(inputControl);
+                        }
 
-                        courseActivities[moduleKey].appendChild(inputControl);
                     }
                 }
             }
         },
-        populateMenus: function(data) {
-            var dropMenus = ['block-massaction-selectsome',
-                             'block-massaction-move',
-                             'block-massaction-clone'];
-            var menuId = 0;
-            var menuItem = '';
-            var sectionId = 0;
+        populateMenus: function (data) {
+            let dropMenus = ['block-massaction-selectsome',
+                'block-massaction-move',
+                'block-massaction-clone'];
+            let menuId = 0;
+            let menuItem = '';
+            let sectionId = 0;
 
             // This loop creates and appends all the options to the three drop menus.
             for (sectionId in data.sectionnames) {
@@ -124,14 +129,14 @@ define(['jquery', 'core/str'], function($, corestr) {
                 }
             }
         },
-        selectAllHandler: function(eventData) {
+        selectAllHandler: function (eventData) {
             // Defaults. Assume we have a bad target and plan to do nothing.
-            var checkAll = false;
-            var checkNone = false;
-            var checkSome = false;
-            var sectionId = '';
-            var moduleId = '';
-            var moduleKey = '';
+            let checkAll = false;
+            let checkNone = false;
+            let checkSome = false;
+            let sectionId = '';
+            let moduleId = '';
+            let moduleKey = '';
 
             /*
              * There is no default case in this switch because it is simply unnecessary. If
@@ -143,7 +148,7 @@ define(['jquery', 'core/str'], function($, corestr) {
             switch (eventData.currentTarget.id) {
                 case 'block-massaction-selectsome':
                     checkSome = true;
-                    // Falls through.
+                // Falls through.
 
                 case 'block-massaction-selectnone':
                     checkNone = true;
@@ -153,7 +158,7 @@ define(['jquery', 'core/str'], function($, corestr) {
                      * Set this input's value to false to track that change.
                      */
                     $('#block-massaction-selected-all').val('false');
-                    // Falls through.
+                // Falls through.
 
                 case 'block-massaction-selectall':
                     if (!checkNone) {
@@ -182,10 +187,10 @@ define(['jquery', 'core/str'], function($, corestr) {
                         for (moduleKey in eventData.data.sectionmodules[sectionId]) {
                             moduleId = eventData.data.sectionmodules[sectionId][moduleKey];
 
-                                /*
-                                 * Make sure this module exists in the DOM. No point setting state
-                                 * on a non-existent input.
-                                 */
+                            /*
+                             * Make sure this module exists in the DOM. No point setting state
+                             * on a non-existent input.
+                             */
                             if ($('#massaction-input-' + moduleId).length > 0) {
                                 $('#massaction-input-' + moduleId).prop('checked', true);
                             }
@@ -203,15 +208,15 @@ define(['jquery', 'core/str'], function($, corestr) {
                     break;
             }
         },
-        actionHandler: function(eventData) {
-            var activities = new Array();
-            var activeTabId = 0;
-            var courseFormat = eventData.data.courseformat;
-            var moduleId = '';
-            var moduleKey = null;
-            var numberOfActivities = 0;
-            var sectionId = $('#block-massaction-selectsome').val();
-            var target = '';
+        actionHandler: function (eventData) {
+            let activities = new Array();
+            let activeTabId = 0;
+            let courseFormat = eventData.data.courseformat;
+            let moduleId = '';
+            let moduleKey = null;
+            let numberOfActivities = 0;
+            let sectionId = $('#block-massaction-selectsome').val();
+            let target = '';
 
             /*
              * When a course uses the OneTopic format and the user clicks 'Select all' or chooses
@@ -223,9 +228,9 @@ define(['jquery', 'core/str'], function($, corestr) {
              * be manually deselected.
              */
             if (courseFormat === 'onetopic') {
-                var activeTab = $('li.active:eq(0)');
-                var textContent = activeTab[0].textContent;
-                var activeSection = $("li[aria-label='" + textContent + "']").attr('id');
+                let activeTab = $('li.active:eq(0)');
+                let textContent = activeTab[0].textContent;
+                let activeSection = $("li[aria-label='" + textContent + "']").attr('id');
                 activeSection = activeSection.split('-');
                 activeTabId = activeSection[1];
             }
@@ -233,8 +238,8 @@ define(['jquery', 'core/str'], function($, corestr) {
             $('#block-massaction-selected-section').val(sectionId);
 
             // Find out what the user wants to do.
-            var actionTarget = eventData.currentTarget.id.split('-');
-            var action = actionTarget[actionTarget.length - 1];
+            let actionTarget = eventData.currentTarget.id.split('-');
+            let action = actionTarget[actionTarget.length - 1];
 
             switch (sectionId) {
                 case 'all':
@@ -245,13 +250,13 @@ define(['jquery', 'core/str'], function($, corestr) {
                             moduleId = eventData.data.sectionmodules[sectionId][moduleKey];
 
                             if (((courseFormat === 'onetopic' && activeTabId === sectionId) ||
-                                 courseFormat !== 'onetopic') &&
-                                 $('#massaction-input-' + moduleId).length > 0 &&
-                                 $('#massaction-input-' + moduleId).is(':checked')) {
+                                courseFormat !== 'onetopic') &&
+                                $('#massaction-input-' + moduleId).length > 0 &&
+                                $('#massaction-input-' + moduleId).is(':checked')) {
 
                                 activities.push(moduleId);
                             } else if ($('#block-massaction-selected-all').val() === 'true' &&
-                                       courseFormat === 'onetopic' && activeTabId !== sectionId) {
+                                courseFormat === 'onetopic' && activeTabId !== sectionId) {
                                 activities.push(moduleId);
                             }
                         }
@@ -271,9 +276,9 @@ define(['jquery', 'core/str'], function($, corestr) {
                         moduleId = eventData.data.sectionmodules[sectionId][moduleKey];
 
                         if (((courseFormat === 'onetopic' && activeTabId === sectionId) ||
-                             courseFormat !== 'onetopic') &&
-                             $('#massaction-input-' + moduleId).length > 0 &&
-                             $('#massaction-input-' + moduleId).is(':checked')) {
+                            courseFormat !== 'onetopic') &&
+                            $('#massaction-input-' + moduleId).length > 0 &&
+                            $('#massaction-input-' + moduleId).is(':checked')) {
 
                             activities.push(moduleId);
                         } else if (courseFormat === 'onetopic' && activeTabId !== sectionId) {
@@ -292,11 +297,11 @@ define(['jquery', 'core/str'], function($, corestr) {
             switch (action) {
                 case 'delete':
                     if (numberOfActivities > 0) {
-                        var confirmDelete = corestr.get_string('confirmation',
-                                                               'block_massaction',
-                                                               numberOfActivities);
+                        let confirmDelete = corestr.get_string('confirmation',
+                            'block_massaction',
+                            numberOfActivities);
 
-                        $.when(confirmDelete).done(function(confirmDelete) {
+                        $.when(confirmDelete).done(function (confirmDelete) {
                             if (!window.confirm(confirmDelete)) {
                                 return false;
                             } else {
@@ -319,12 +324,11 @@ define(['jquery', 'core/str'], function($, corestr) {
             if (numberOfActivities > 0) {
                 $('#block-massaction-control-form').submit();
             } else {
-                var nothingSelected = corestr.get_string('noitemselected', 'block_massaction');
-                $.when(nothingSelected).done(function(alertString) {
+                let nothingSelected = corestr.get_string('noitemselected', 'block_massaction');
+                $.when(nothingSelected).done(function (alertString) {
                     window.alert(alertString);
                 });
             }
         }
-    };
-});
-/* jshint ignore:end */
+    }
+})

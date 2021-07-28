@@ -19,13 +19,15 @@
  *
  * @package    block_massaction
  * @copyright  2013 University of Minnesota
+ * @coauthor   2021 York University
+ * @coauthor   Patrick Thibaudeau
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_massaction'; // Required since Moodle 3.0.
-$plugin->version = 2018042400;  // YYYYMMDDXX (year, month, day, increment).
-$plugin->requires = 2017111300; // YYYYMMDDXX (This is the release version for Moodle 3.3).
+$plugin->version = 2021072800;  // YYYYMMDDXX (year, month, day, increment).
+$plugin->requires = 2021051700; // YYYYMMDDXX (This is the release version for Moodle 3.3).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v5.1.3';
+$plugin->release = 'v6.0.0';
